@@ -4,5 +4,16 @@
   "description": "Crochet Dev Tools",
   "devtools_page": "page.html",
   "manifest_version": 2,
-  "permissions": ["tabs", "contextMenus"]
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": ["tabs", "activeTab", "contextMenus"]
 }

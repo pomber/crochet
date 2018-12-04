@@ -8,7 +8,13 @@ function Bar(props) {
   const [count, setCount] = useState(2);
   // console.log("count", count);
   useDomChildren(<Div name={props.name + count} />);
-  useChildren(<Button onClick={() => setCount(count + 1)} />);
+  useChildren(
+    <Button
+      onClick={() => {
+        setCount(count + 1);
+      }}
+    />
+  );
 }
 
 function App(props) {
