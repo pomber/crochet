@@ -1,14 +1,13 @@
 {
   "scripts": {
-    "start": "parcel watch src/index.html --no-hmr",
-    "build": "parcel build src/index.html"
+    "start": "parcel watch src/index.html src/content.js src/background.js --no-hmr && cp static/* dist",
+    "build": "parcel build src/index.html src/content.js src/background.js"
   },
   "dependencies": {
     "react": "^16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha.2"
   },
   "devDependencies": {
-    "parcel": "^1.10.3",
-    "parcel-plugin-static-files-copy": "^1.2.4"
+    "parcel": "^1.10.3"
   }
 }

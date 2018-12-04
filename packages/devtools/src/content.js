@@ -5,7 +5,7 @@ function installGlobalHook(window) {
     return;
   }
   var hook = {
-    log: () => console.log("hook"),
+    log: () => console.log("hook ss"),
     post: () => {
       window.postMessage(
         {
