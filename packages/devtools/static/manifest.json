@@ -1,0 +1,8 @@
+{
+  "name": "Crochet Dev Tools",
+  "version": "1.1",
+  "description": "Crochet Dev Tools",
+  "devtools_page": "page.html",
+  "manifest_version": 2,
+  "permissions": ["tabs", "contextMenus"]
+}

@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "parcel": "^1.10.3"
+  }
+}
