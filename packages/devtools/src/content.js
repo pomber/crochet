@@ -10,7 +10,7 @@ function installGlobalHook(window) {
       window.postMessage(
         {
           source: "react-devtools-detector",
-          foo: "bar"
+          foo: new Date().toString()
         },
         "*"
       );
@@ -29,11 +29,14 @@ script.textContent = js;
 document.documentElement.appendChild(script);
 script.parentNode.removeChild(script);
 
-var port = chrome.runtime.connect({
-  name: "content-script"
-});
+let port = null;
 window.addEventListener("message", handleMessageFromPage);
 function handleMessageFromPage(evt) {
+  if (!port) {
+    port = chrome.runtime.connect({
+      name: "content-script"
+    });
+  }
   console.log("content receive", evt);
   if (evt.source === window && evt.data) {
     // console.log('page -> rep -> dev', evt.data);

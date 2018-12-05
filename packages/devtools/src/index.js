@@ -1,7 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-ReactDOM.render(<div>Faa</div>, document.getElementById("root"));
+console.log("devtools init");
+
+ReactDOM.render(
+  <div>
+    <h2>{chrome.devtools.inspectedWindow.tabId}</h2>
+    <pre>Faa</pre>
+  </div>,
+  document.getElementById("root")
+);
 
 // Create a connection to the background page
 var backgroundPageConnection = chrome.runtime.connect({
@@ -9,6 +17,13 @@ var backgroundPageConnection = chrome.runtime.connect({
 });
 
 console.log("port", backgroundPageConnection);
-backgroundPageConnection.onMessage.addListener(message =>
-  console.log("devtools", message)
-);
+backgroundPageConnection.onMessage.addListener(message => {
+  console.log("devtools", message);
+  ReactDOM.render(
+    <div>
+      <h2>{chrome.devtools.inspectedWindow.tabId}</h2>
+      <pre>{JSON.stringify(message)}</pre>
+    </div>,
+    document.getElementById("root")
+  );
+});
