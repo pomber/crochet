@@ -5,12 +5,7 @@ ReactDOM.render(<div>Faa</div>, document.getElementById("root"));
 
 // Create a connection to the background page
 var backgroundPageConnection = chrome.runtime.connect({
-  name: "panel"
-});
-
-backgroundPageConnection.postMessage({
-  name: "init",
-  tabId: chrome.devtools.inspectedWindow.tabId
+  name: "" + chrome.devtools.inspectedWindow.tabId
 });
 
 console.log("port", backgroundPageConnection);
