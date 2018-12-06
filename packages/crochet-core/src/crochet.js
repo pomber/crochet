@@ -38,6 +38,11 @@ let context = {
 let rootInstance = newInstance();
 
 function logTree(instance, leftPad = "") {
+  if (window.__CROCHET_DEVTOOLS_GLOBAL_HOOK__) {
+    window.__CROCHET_DEVTOOLS_GLOBAL_HOOK__.post(
+      JSON.parse(JSON.stringify(instance))
+    );
+  }
   if (leftPad === "") {
     console.log("---");
   }

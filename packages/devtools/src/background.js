@@ -11,6 +11,9 @@ chrome.runtime.onConnect.addListener(port => {
   if (!isDevTools) {
     // add listener for content script messages
     port.onMessage.addListener(message => {
+      if (message.source !== "crochet-devtools") {
+        return;
+      }
       console.log(`${tab} - content sends:`, message);
       console.log("devtools", devToolsPorts);
       const hasDevTools = tab in devToolsPorts;

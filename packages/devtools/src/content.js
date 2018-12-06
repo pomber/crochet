@@ -5,12 +5,12 @@ function installGlobalHook(window) {
     return;
   }
   var hook = {
-    log: () => console.log("hook ss"),
-    post: () => {
+    post: data => {
       window.postMessage(
         {
-          source: "react-devtools-detector",
-          foo: new Date().toString()
+          source: "crochet-devtools",
+          foo: new Date().toString(),
+          data
         },
         "*"
       );
