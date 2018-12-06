@@ -3,12 +3,24 @@ import ReactDOM from "react-dom";
 
 console.log("devtools init");
 
+function treeToString(tree, leftPad = "") {
+  if (tree.children.length === 0) {
+    return `${leftPad}<${tree.name} />`;
+  }
+
+  return [
+    `${leftPad}<${tree.name}>`,
+    ...tree.children.map(child => treeToString(child, leftPad + "  ")),
+    `${leftPad}</${tree.name}>`
+  ].join("\n");
+}
+
 function SubtreeUpdate({ update }) {
   const { tree, logs, start } = update;
   return (
     <div style={{ flex: 1, display: "flex" }}>
-      <pre>{JSON.stringify(tree, null, 2)}</pre>
-      <div>
+      <pre style={{ flex: 1 }}>{treeToString(tree)}</pre>
+      <div style={{ flex: 2 }}>
         {logs.map((log, index) => (
           <div key={index}>{`${Math.round(log.ts)} - ${log.description}`}</div>
         ))}
