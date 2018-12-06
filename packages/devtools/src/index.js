@@ -3,6 +3,20 @@ import ReactDOM from "react-dom";
 
 console.log("devtools init");
 
+function SubtreeUpdate({ update }) {
+  const { tree, logs, start } = update;
+  return (
+    <div style={{ flex: 1, display: "flex" }}>
+      <pre>{JSON.stringify(tree, null, 2)}</pre>
+      <div>
+        {logs.map((log, index) => (
+          <div key={index}>{`${Math.round(log.ts)} - ${log.description}`}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function App({ history }) {
   const [index, setIndex] = useState(history.length ? history.length - 1 : 0);
   if (history.length === 0) {
@@ -23,7 +37,7 @@ function App({ history }) {
           </li>
         ))}
       </ul>
-      <pre style={{ flex: 1 }}>{JSON.stringify(current, null, 2)}</pre>
+      <SubtreeUpdate update={current} />
     </div>
   );
 }
@@ -39,6 +53,6 @@ var backgroundPageConnection = chrome.runtime.connect({
 
 backgroundPageConnection.onMessage.addListener(message => {
   console.log("devtools", message);
-  history.push(message);
+  history.push(message.data);
   ReactDOM.render(<App history={history} />, root);
 });

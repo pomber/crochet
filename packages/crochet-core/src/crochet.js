@@ -1,5 +1,4 @@
-//
-// todo use call return pattern
+import { componentNamesTree } from "./instrumentation";
 
 function arrify(val) {
   return val == null ? [] : Array.isArray(val) ? val : [val];
@@ -37,33 +36,21 @@ let context = {
 
 let rootInstance = newInstance();
 
-function logTree(instance, leftPad = "") {
-  if (window.__CROCHET_DEVTOOLS_GLOBAL_HOOK__) {
-    window.__CROCHET_DEVTOOLS_GLOBAL_HOOK__.post(
-      JSON.parse(JSON.stringify(instance))
-    );
-  }
-  if (leftPad === "") {
-    console.log("---");
-  }
-  const { element, children, refs, states } = instance;
-  console.log(
-    leftPad +
-      "<" +
-      (element.type.name ? element.type.name : element.type) +
-      "/>"
-  );
-  console.log(leftPad + "refs", refs);
-  console.log(leftPad + "states", states);
-  console.log(leftPad + "children", children);
-
-  children.forEach(child => logTree(child, leftPad + "  "));
-}
+let currentUpdate = null;
 
 function updateWithEffects(instance) {
-  logTree(instance);
+  currentUpdate = {
+    tree: componentNamesTree(instance),
+    start: performance.now(),
+    logs: []
+  };
+
   update(instance);
   runEffects(instance);
+
+  if (window.__CROCHET_DEVTOOLS_GLOBAL_HOOK__) {
+    window.__CROCHET_DEVTOOLS_GLOBAL_HOOK__.post(currentUpdate);
+  }
 }
 
 function newInstance() {
@@ -81,11 +68,17 @@ function runEffects(instance) {
 
       // console.log("cleanup", effect);
       if (cleanup) {
-        console.log("RUNNING CLEANUP", cleanup.name);
+        currentUpdate.logs.push({
+          ts: performance.now(),
+          description: `CLEANUP ${cleanup.name}`
+        });
         cleanup();
       }
 
-      console.log("RUNNING EFFECT", fn.name);
+      currentUpdate.logs.push({
+        ts: performance.now(),
+        description: `EFFECT ${fn.name}`
+      });
       const newCleanup = fn(childRefs);
 
       effect[3] = newCleanup;
@@ -99,7 +92,10 @@ function update(instance) {
     return;
   }
 
-  console.log("RENDER", instance.element.type.name);
+  currentUpdate.logs.push({
+    ts: performance.now(),
+    description: `RENDER ${instance.element.type.name}`
+  });
 
   context.children = [];
   context.instance = instance;
