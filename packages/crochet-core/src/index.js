@@ -1,6 +1,8 @@
 import Crochet, { useChildren, useState, useEffect } from "./crochet";
 import { useDomChildren, useRoot, Div, Button } from "./crochet-dom";
 
+import { unstable_trace as trace } from "scheduler/tracing";
+
 const $root = document.getElementById("root");
 
 function Bar(props) {
@@ -11,7 +13,9 @@ function Bar(props) {
   useChildren(
     <Button
       onClick={() => {
-        setCount(count + 1);
+        trace(`Inc ${count}`, performance.now(), () => {
+          setCount(count + 1);
+        });
       }}
     />
   );

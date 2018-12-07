@@ -1,4 +1,5 @@
 import { componentNamesTree } from "./instrumentation";
+import { unstable_getCurrent as getCurrentInteraction } from "scheduler/tracing";
 
 function arrify(val) {
   return val == null ? [] : Array.isArray(val) ? val : [val];
@@ -39,9 +40,12 @@ let rootInstance = newInstance();
 let currentUpdate = null;
 
 function updateWithEffects(instance) {
+  const interaction = [...getCurrentInteraction()][0];
+  console.log(interaction);
   currentUpdate = {
     tree: componentNamesTree(instance),
     start: performance.now(),
+    name: interaction && interaction.name,
     logs: []
   };
 

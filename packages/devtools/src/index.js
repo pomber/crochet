@@ -45,7 +45,9 @@ function App({ history }) {
       <ul style={{ listStyleType: "none", display: "flex", padding: 0 }}>
         {history.map((message, index) => (
           <li key={index}>
-            <button onClick={() => setIndex(index)}>{index}</button>
+            <button onClick={() => setIndex(index)}>
+              {message.name || index}
+            </button>
           </li>
         ))}
       </ul>
